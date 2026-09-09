@@ -4,56 +4,6 @@
     </head>
     <body>
         <div id='animation'></div>
-
-
-        <script>
-
-            class Node {
-                constructor(id) {
-                    this.id = id;
-                }
-            }
-
-            class Graph {
-
-            }
-
-
-            //3D ENV setup
-            const CANVAS_WIDTH = 600, CANVAS_HEIGHT = 400;
-
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(90, CANVAS_WIDTH/CANVAS_HEIGHT, 0.1, 1000);
-
-            camera.position.y -= 0.1;
-            camera.position.x += 0.5;
-            camera.position.z = 0.9;
-
-            camera.lookAt(0,0,0);
-
-            const renderer = new THREE.WebGLRenderer();
-            renderer.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
-            renderer.setClearColor(0x000000);
-
-            document.getElementById('animation').appendChild(renderer.domElement);
-            renderer.domElement.style.borderRadius = '20px';
-            renderer.setAnimationLoop(animate);
-
-            //wireframe for cube
-            var cgol_cube = {geo: new THREE.BoxGeometry(0.5, 0.5, 0.5)};
-            cgol_cube.edges = new THREE.EdgesGeometry(cgol_cube.geo);
-            cgol_cube.line = new THREE.LineSegments(
-                cgol_cube.edges,
-                new THREE.LineBasicMaterial({color: 0xffffff})
-            );
-
-            scene.add(cgol_cube.line);
-
-            //animation function
-            function animate(time) {
-                renderer.render(scene, camera);
-            }
-        </script>
-
+        <script src='./main.js'></script>
     </body>
 </html>
