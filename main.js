@@ -24,10 +24,14 @@ class Graph {
 	    }
 	}
 
-	//making an oscillator to test.
+	//making some oscillators to test.
 	this.grid[5][5].alive = true;
 	this.grid[4][5].alive = true;
 	this.grid[6][5].alive = true;
+
+	this.grid[15][5].alive = true;
+	this.grid[14][5].alive = true;
+	this.grid[16][5].alive = true;
 	
 	//assign the neighbors for each node
 	for(let i = 0; i < 2*COLS; i += 1) {
@@ -193,7 +197,7 @@ function initialize() {
 }
 
 function redrawFrontFace() {
-    for(let i = 0; i < COLS; i += 1) {
+    for(let i = 0; i < 2*COLS; i += 1) {
 	for(let j = 0; j < ROWS; j += 1) {
 	    if(graph.grid[i][j].alive == true) {
 		graph.grid[i][j].mesh.material.color.set('black');
