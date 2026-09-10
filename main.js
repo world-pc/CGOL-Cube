@@ -24,24 +24,28 @@ class Graph {
 	    }
 	}
 
-	//making some oscillators to test.
+	this.grid[9][4].alive = true;
+	this.grid[9][6].alive = true;
+	this.grid[8][5].alive = true;
+
+	/* making some oscillators to test.
 	this.grid[5][5].alive = true;
 	this.grid[4][5].alive = true;
 	this.grid[6][5].alive = true;
 
 	this.grid[15][5].alive = true;
 	this.grid[14][5].alive = true;
-	this.grid[16][5].alive = true;
+	this.grid[16][5].alive = true; */
 	
 	//assign the neighbors for each node
-	for(let i = 0; i < 2*COLS; i += 1) {
+	for(let i = 0; i < this.grid.length; i += 1) {
 	    for(let j = 0; j < ROWS; j += 1) {
 		if(i > 0) {
 		    this.grid[i][j].neighbor_ids.push(
 			this.grid[i-1][j].id
 		    );
 		}
-		if(i < 2*COLS-1) {
+		if(i < this.grid.length-1) {
 		    this.grid[i][j].neighbor_ids.push(
 			this.grid[i+1][j].id
 		    );
@@ -69,13 +73,13 @@ class Graph {
 		    );
 		}
 		//upper right
-		if(i < 2*COLS-1 && j > 0) {
+		if(i < this.grid.length-1 && j > 0) {
 		    this.grid[i][j].neighbor_ids.push(
 			this.grid[i+1][j-1].id
 		    );
 		}
 		//lower right
-		if(i < 2*COLS-1 && j < ROWS-1) {
+		if(i < this.grid.length-1 && j < ROWS-1) {
 		    this.grid[i][j].neighbor_ids.push(
 			this.grid[i+1][j+1].id
 		    );
@@ -85,7 +89,7 @@ class Graph {
     }
     
     isAliveById(node_id) {
-	for(let i = 0; i < 2*COLS; i += 1) {
+	for(let i = 0; i < this.grid.length; i += 1) {
 	    for(let j = 0; j < ROWS; j += 1) {
 		if(this.grid[i][j].id === node_id) {
 		    return this.grid[i][j].alive;
@@ -183,7 +187,7 @@ function initialize() {
     }
 
     //draw right face
-    for(let i = COLS; i < 2*COLS; i += 1) {
+    for(let i = COLS; i < graph.grid.length; i += 1) {
 	for(let j = 0; j < ROWS; j += 1) {
 	    graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
 		new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
@@ -197,7 +201,7 @@ function initialize() {
 }
 
 function redrawFrontFace() {
-    for(let i = 0; i < 2*COLS; i += 1) {
+    for(let i = 0; i < graph.grid.length; i += 1) {
 	for(let j = 0; j < ROWS; j += 1) {
 	    if(graph.grid[i][j].alive == true) {
 		graph.grid[i][j].mesh.material.color.set('black');
@@ -216,12 +220,12 @@ let frame = 0;
 function animate(time) {
     // camera orbits origin
     camera.position.y = 0.1;
-    camera.position.x = Math.cos(frame/100);
-    camera.position.z = Math.sin(frame/100);
+    camera.position.x = Math.cos(/*frame/100 +*/ Math.PI/3.5);
+    camera.position.z = Math.sin(/*frame/100 +*/ Math.PI/3.5);
     camera.lookAt(0,0,0);
 
-    if(frame % 50 == 0) {
-	graph.update();
+    if(frame % 25 == 0) {
+	//graph.update();
 	redrawFrontFace();
     }
     
