@@ -3,133 +3,134 @@ let ROWS = 10,
 
 class Node {
     constructor(id, alive) {
-	this.id = id;
-	this.alive = alive;
-	this.mesh = null;
-	this.neighbor_ids = [];
+        this.id = id;
+        this.alive = alive;
+        this.mesh = null;
+        this.neighbor_ids = [];
     }
 }
 
 class Graph {
     constructor() {
 
-	this.grid = [];
+        this.grid = [];
 
-	let counter = 0;
-	for(let i = 0; i < 4*COLS; i += 1) {
-	    this.grid.push([]);
-	    for(let j = 0; j < ROWS; j += 1) {
-		this.grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
-		counter += 1;
-	    }
-	}
-	
-	//assign the neighbors for each node
-	for(let i = 0; i < this.grid.length; i += 1) {
-	    for(let j = 0; j < ROWS; j += 1) {
-		if(i > 0) {
-		    this.grid[i][j].neighbor_ids.push(
-			this.grid[i-1][j].id
-		    );
-		}
-		if(i < this.grid.length-1) {
-		    this.grid[i][j].neighbor_ids.push(
-			this.grid[i+1][j].id
-		    );
-		}
-		if(j > 0) {
-		    this.grid[i][j].neighbor_ids.push(
-			this.grid[i][j-1].id
-		    );
-		}
-		if(j < ROWS-1) {
-		    this.grid[i][j].neighbor_ids.push(
-			this.grid[i][j+1].id
-		    );
-		}
-		//upper left
-		if(i > 0 && j > 0) {
-		    this.grid[i][j].neighbor_ids.push(
-			this.grid[i-1][j-1].id
-		    );
-		}
-		//lower left
-		if(i > 0 && j < ROWS-1) {
-		    this.grid[i][j].neighbor_ids.push(
-			this.grid[i-1][j+1].id
-		    );
-		}
-		//upper right
-		if(i < this.grid.length-1 && j > 0) {
-		    this.grid[i][j].neighbor_ids.push(
-			this.grid[i+1][j-1].id
-		    );
-		}
-		//lower right
-		if(i < this.grid.length-1 && j < ROWS-1) {
-		    this.grid[i][j].neighbor_ids.push(
-			this.grid[i+1][j+1].id
-		    );
-		}
-	    }
-	}
+        let counter = 0;
+        for(let i = 0; i < 4*COLS; i += 1) {
+            this.grid.push([]);
+            for(let j = 0; j < ROWS; j += 1) {
+                this.grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
+                counter += 1;
+            }
+        }
+        
+        //assign the neighbors for each node
+        for(let i = 0; i < this.grid.length; i += 1) {
+            for(let j = 0; j < ROWS; j += 1) {
+                if(i > 0) {
+                    this.grid[i][j].neighbor_ids.push(
+                        this.grid[i-1][j].id
+                    );
+                }
+                if(i < this.grid.length-1) {
+                    this.grid[i][j].neighbor_ids.push(
+                        this.grid[i+1][j].id
+                    );
+                }
+                if(j > 0) {
+                    this.grid[i][j].neighbor_ids.push(
+                        this.grid[i][j-1].id
+                    );
+                }
+                if(j < ROWS-1) {
+                    this.grid[i][j].neighbor_ids.push(
+                        this.grid[i][j+1].id
+                    );
+                }
+                //upper left
+                if(i > 0 && j > 0) {
+                    this.grid[i][j].neighbor_ids.push(
+                        this.grid[i-1][j-1].id
+                    );
+                }
+                //lower left
+                if(i > 0 && j < ROWS-1) {
+                    this.grid[i][j].neighbor_ids.push(
+                        this.grid[i-1][j+1].id
+                    );
+                }
+                //upper right
+                if(i < this.grid.length-1 && j > 0) {
+                    this.grid[i][j].neighbor_ids.push(
+                        this.grid[i+1][j-1].id
+                    );
+                }
+                //lower right
+                if(i < this.grid.length-1 && j < ROWS-1) {
+                    this.grid[i][j].neighbor_ids.push(
+                        this.grid[i+1][j+1].id
+                    );
+                }
+            }
+        }
     }
     
     isAliveById(node_id) {
-	for(let i = 0; i < this.grid.length; i += 1) {
-	    for(let j = 0; j < ROWS; j += 1) {
-		if(this.grid[i][j].id === node_id) {
-		    return this.grid[i][j].alive;
-		}
-	    }
-	}
-	return false;
+        for(let i = 0; i < this.grid.length; i += 1) {
+            for(let j = 0; j < ROWS; j += 1) {
+                if(this.grid[i][j].id === node_id) {
+                    return this.grid[i][j].alive;
+                }
+            }
+        }
+        return false;
     }
     
     nxValue(given_node) {
-	let live_neigh_count = 0;
-	for(let i = 0; i < given_node.neighbor_ids.length; i += 1) {
-	    if(this.isAliveById(given_node.neighbor_ids[i])) {
-		live_neigh_count += 1;
-	    }
-	}
+        let live_neigh_count = 0;
+        for(let i = 0; i < given_node.neighbor_ids.length; i += 1) {
+            if(this.isAliveById(given_node.neighbor_ids[i])) {
+                live_neigh_count += 1;
+            }
+        }
 
-	if(given_node.alive) {
-	    //console.log('live node has ' + live_neigh_count + ' alive neighbors.');
-	    if(live_neigh_count < 2) {
-		return false;
-	    }
-	    else if(live_neigh_count == 2 ||
-		    live_neigh_count == 3) {
-		return true;
-	    }
-	    else if(live_neigh_count > 3) {
-		return false;
-	    }
-	}
-	else {
-	    if(live_neigh_count == 3) {
-		return true;
-	    }
-	}   
-	
-	return false;
+        if(given_node.alive) {
+            //console.log('live node has ' + live_neigh_count + ' alive neighbors.');
+            if(live_neigh_count < 2) {
+                return false;
+            }
+            else if(live_neigh_count == 2 ||
+                live_neigh_count == 3) {
+                return true;
+            }
+            else if(live_neigh_count > 3) {
+                return false;
+            }
+        }
+        else {
+            if(live_neigh_count == 3) {
+                return true;
+            }
+        }   
+        
+        return false;
     }
     
     update() {
-	let nu_grid = this.grid.map(col => col.map(node => {
-	    let clone = new Node(node.id, node.alive);
-	    clone.neighbor_ids = [...node.neighbor_ids];
-	    clone.mesh = node.mesh;
-	    return clone;
-	}));
-	for(let i = 0; i < this.grid.length; i += 1) {
-	    for(let j = 0; j < this.grid[i].length; j += 1) {
-		nu_grid[i][j].alive = this.nxValue(this.grid[i][j]);
-	    }
-	}
+        let nu_grid = this.grid.map(col => col.map(node => {
+            let clone = new Node(node.id, node.alive);
+            clone.neighbor_ids = [...node.neighbor_ids];
+            clone.mesh = node.mesh;
+            return clone;
+        }));
 
-	this.grid = nu_grid.map(col => [...col]);
+        for(let i = 0; i < this.grid.length; i += 1) {
+            for(let j = 0; j < this.grid[i].length; j += 1) {
+                nu_grid[i][j].alive = this.nxValue(this.grid[i][j]);
+            }
+        }
+
+        this.grid = nu_grid.map(col => [...col]);
     }
 }
 
@@ -164,8 +165,8 @@ camera.position.set(0, 0.1, 0.9);
     var cgol_cube = {geo: new THREE.BoxGeometry(0.5, 0.5, 0.5)};
     cgol_cube.edges = new THREE.EdgesGeometry(cgol_cube.geo);
     cgol_cube.line = new THREE.LineSegments(
-	cgol_cube.edges,
-	new THREE.LineBasicMaterial({color: 0xffffff})
+        cgol_cube.edges,
+        new THREE.LineBasicMaterial({color: 0xffffff})
     );
     scene.add(cgol_cube.line);
 
@@ -249,8 +250,8 @@ function animate(time) {
     controls.update();
 
     if(frame % 25 == 0) {
-	graph.update();
-	redrawFrontFace();
+        graph.update();
+        redrawFrontFace();
     }
     
     renderer.render(scene, camera);
