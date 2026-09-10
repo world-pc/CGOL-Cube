@@ -19,14 +19,14 @@ class Graph {
 	for(let i = 0; i < 2*COLS; i += 1) {
 	    this.grid.push([]);
 	    for(let j = 0; j < ROWS; j += 1) {
-		this.grid.at(-1).push(new Node(counter, false));
+		this.grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
 		counter += 1;
 	    }
 	}
 
-	this.grid[9][4].alive = true;
+	/*this.grid[9][4].alive = true;
 	this.grid[9][6].alive = true;
-	this.grid[8][5].alive = true;
+	this.grid[8][5].alive = true;*/
 
 	/* making some oscillators to test.
 	this.grid[5][5].alive = true;
@@ -108,6 +108,7 @@ class Graph {
 	}
 
 	if(given_node.alive) {
+	    console.log('live node has ' + live_neigh_count + ' alive neighbors.');
 	    if(live_neigh_count < 2) {
 		return false;
 	    }
@@ -193,7 +194,7 @@ function initialize() {
 		new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
 	    graph.grid[i][j].mesh.position.x = 0.25;
 	    graph.grid[i][j].mesh.position.y = -0.225+(0.5/ROWS)*j;
-	    graph.grid[i][j].mesh.position.z = -0.225+(0.5/COLS)*(i-COLS);
+	    graph.grid[i][j].mesh.position.z = 0.225-(0.5/COLS)*(i-COLS);
 	    graph.grid[i][j].mesh.rotateY(Math.PI / 2);
 	    scene.add(graph.grid[i][j].mesh);
 	}
@@ -225,7 +226,7 @@ function animate(time) {
     camera.lookAt(0,0,0);
 
     if(frame % 25 == 0) {
-	//graph.update();
+	graph.update();
 	redrawFrontFace();
     }
     
