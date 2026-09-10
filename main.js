@@ -16,26 +16,13 @@ class Graph {
 	this.grid = [];
 
 	let counter = 0;
-	for(let i = 0; i < 2*COLS; i += 1) {
+	for(let i = 0; i < 4*COLS; i += 1) {
 	    this.grid.push([]);
 	    for(let j = 0; j < ROWS; j += 1) {
 		this.grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
 		counter += 1;
 	    }
 	}
-
-	/*this.grid[9][4].alive = true;
-	this.grid[9][6].alive = true;
-	this.grid[8][5].alive = true;*/
-
-	/* making some oscillators to test.
-	this.grid[5][5].alive = true;
-	this.grid[4][5].alive = true;
-	this.grid[6][5].alive = true;
-
-	this.grid[15][5].alive = true;
-	this.grid[14][5].alive = true;
-	this.grid[16][5].alive = true; */
 	
 	//assign the neighbors for each node
 	for(let i = 0; i < this.grid.length; i += 1) {
@@ -108,7 +95,7 @@ class Graph {
 	}
 
 	if(given_node.alive) {
-	    console.log('live node has ' + live_neigh_count + ' alive neighbors.');
+	    //console.log('live node has ' + live_neigh_count + ' alive neighbors.');
 	    if(live_neigh_count < 2) {
 		return false;
 	    }
@@ -147,7 +134,7 @@ class Graph {
 }
 
 const CANVAS_WIDTH = 600, CANVAS_HEIGHT = 400;
-let scene, camera, renderer, graph;
+let scene, camera, renderer, graph, controls;
 function initialize() {
 
     scene = new THREE.Scene();
@@ -156,6 +143,15 @@ function initialize() {
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     renderer.setClearColor(0x000000);
+
+    // drag-to-orbit
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.target.set(0, 0, 0);
+    controls.update();
+
+camera.position.set(0, 0.1, 0.9); 
 
     document.getElementById('animation').appendChild(renderer.domElement);
     renderer.domElement.style.borderRadius = '20px';
@@ -177,27 +173,52 @@ function initialize() {
 
     //draw front face
     for(let i = 0; i < COLS; i += 1) {
-	for(let j = 0; j < ROWS; j += 1) {
-	    graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
-		new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
-	    graph.grid[i][j].mesh.position.x = -0.225+(0.5/COLS)*i;
-	    graph.grid[i][j].mesh.position.y = -0.225+(0.5/ROWS)*j;
-	    graph.grid[i][j].mesh.position.z = 0.25;
-	    scene.add(graph.grid[i][j].mesh);
-	}
+        for(let j = 0; j < ROWS; j += 1) {
+            graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
+                new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
+            graph.grid[i][j].mesh.position.x = -0.225+(0.5/COLS)*i;
+            graph.grid[i][j].mesh.position.y = -0.225+(0.5/ROWS)*j;
+            graph.grid[i][j].mesh.position.z = 0.25;
+            scene.add(graph.grid[i][j].mesh);
+        }
     }
 
     //draw right face
-    for(let i = COLS; i < graph.grid.length; i += 1) {
-	for(let j = 0; j < ROWS; j += 1) {
-	    graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
-		new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
-	    graph.grid[i][j].mesh.position.x = 0.25;
-	    graph.grid[i][j].mesh.position.y = -0.225+(0.5/ROWS)*j;
-	    graph.grid[i][j].mesh.position.z = 0.225-(0.5/COLS)*(i-COLS);
-	    graph.grid[i][j].mesh.rotateY(Math.PI / 2);
-	    scene.add(graph.grid[i][j].mesh);
-	}
+    for(let i = COLS; i < 2*COLS; i += 1) {
+        for(let j = 0; j < ROWS; j += 1) {
+            graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
+                new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
+            graph.grid[i][j].mesh.position.x = 0.25;
+            graph.grid[i][j].mesh.position.y = -0.225+(0.5/ROWS)*j;
+            graph.grid[i][j].mesh.position.z = 0.225-(0.5/COLS)*(i-COLS);
+            graph.grid[i][j].mesh.rotateY(Math.PI / 2);
+            scene.add(graph.grid[i][j].mesh);
+        }
+    }
+
+    //draw back face
+    for(let i = 2*COLS; i < 3*COLS; i += 1) {
+        for(let j = 0; j < ROWS; j += 1) {
+            graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
+                new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
+            graph.grid[i][j].mesh.position.x = 0.225-(0.5/COLS)*(i-2*COLS);
+            graph.grid[i][j].mesh.position.y = -0.225+(0.5/ROWS)*j;
+            graph.grid[i][j].mesh.position.z = -0.25;
+            scene.add(graph.grid[i][j].mesh);
+        }
+    }
+
+    //draw left face
+    for(let i = 3*COLS; i < 4*COLS; i += 1) {
+        for(let j = 0; j < ROWS; j += 1) {
+            graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
+                new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
+            graph.grid[i][j].mesh.position.x = -0.25;
+            graph.grid[i][j].mesh.position.y = -0.225+(0.5/ROWS)*j;
+            graph.grid[i][j].mesh.position.z = 0.225-(0.5/COLS)*(i-3*COLS);
+            graph.grid[i][j].mesh.rotateY(Math.PI/2);
+            scene.add(graph.grid[i][j].mesh);
+        }
     }
 }
 
@@ -205,10 +226,10 @@ function redrawFrontFace() {
     for(let i = 0; i < graph.grid.length; i += 1) {
 	for(let j = 0; j < ROWS; j += 1) {
 	    if(graph.grid[i][j].alive == true) {
-		graph.grid[i][j].mesh.material.color.set('black');
+            graph.grid[i][j].mesh.material.color.set('black');
 	    }
 	    else {
-		graph.grid[i][j].mesh.material.color.set('white');
+            graph.grid[i][j].mesh.material.color.set('white');
 	    }
 	}
     }
@@ -219,11 +240,13 @@ initialize();
 //animation function
 let frame = 0;
 function animate(time) {
-    // camera orbits origin
+    /* camera orbits origin
     camera.position.y = 0.1;
-    camera.position.x = Math.cos(/*frame/100 +*/ Math.PI/3.5);
-    camera.position.z = Math.sin(/*frame/100 +*/ Math.PI/3.5);
-    camera.lookAt(0,0,0);
+    camera.position.x = Math.cos(frame/100 + Math.PI/3.5);
+    camera.position.z = Math.sin(frame/100 + Math.PI/3.5);
+    camera.lookAt(0,0,0); */
+
+    controls.update();
 
     if(frame % 25 == 0) {
 	graph.update();
