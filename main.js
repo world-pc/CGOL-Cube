@@ -25,50 +25,58 @@ class Graph {
         }
         
         //assign the neighbors for each node
+        const glen = this.grid.length;
         for(let i = 0; i < this.grid.length; i += 1) {
             for(let j = 0; j < ROWS; j += 1) {
-                if(i > 0) {
-                    this.grid[i][j].neighbor_ids.push(
-                        this.grid[i-1][j].id
-                    );
-                }
-                if(i < this.grid.length-1) {
-                    this.grid[i][j].neighbor_ids.push(
-                        this.grid[i+1][j].id
-                    );
-                }
+                
+                //left
+                this.grid[i][j].neighbor_ids.push(
+                    this.grid[(((i-1)%glen)+glen)%glen][j].id
+                );
+
+                //right
+                this.grid[i][j].neighbor_ids.push(
+                    this.grid[(i+1)%glen][j].id
+                );
+
+                //up
                 if(j > 0) {
                     this.grid[i][j].neighbor_ids.push(
                         this.grid[i][j-1].id
                     );
                 }
+
+                //down
                 if(j < ROWS-1) {
                     this.grid[i][j].neighbor_ids.push(
                         this.grid[i][j+1].id
                     );
                 }
+
                 //upper left
-                if(i > 0 && j > 0) {
+                if(j > 0) {
                     this.grid[i][j].neighbor_ids.push(
-                        this.grid[i-1][j-1].id
+                        this.grid[(((i-1)%glen)+glen)%glen][j-1].id
                     );
                 }
                 //lower left
-                if(i > 0 && j < ROWS-1) {
+                if(j < ROWS-1) {
                     this.grid[i][j].neighbor_ids.push(
-                        this.grid[i-1][j+1].id
+                        this.grid[(((i-1)%glen)+glen)%glen][j+1].id
                     );
                 }
+
                 //upper right
-                if(i < this.grid.length-1 && j > 0) {
+                if(j > 0) {
                     this.grid[i][j].neighbor_ids.push(
-                        this.grid[i+1][j-1].id
+                        this.grid[(i+1)%glen][j-1].id
                     );
                 }
+
                 //lower right
-                if(i < this.grid.length-1 && j < ROWS-1) {
+                if(j < ROWS-1) {
                     this.grid[i][j].neighbor_ids.push(
-                        this.grid[i+1][j+1].id
+                        this.grid[(i+1)%glen][j+1].id
                     );
                 }
             }
@@ -152,7 +160,7 @@ function initialize() {
     controls.target.set(0, 0, 0);
     controls.update();
 
-camera.position.set(0, 0.1, 0.9); 
+    camera.position.set(0, 0.1, 0.9); 
 
     document.getElementById('animation').appendChild(renderer.domElement);
     renderer.domElement.style.borderRadius = '20px';
@@ -216,7 +224,7 @@ camera.position.set(0, 0.1, 0.9);
                 new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
             graph.grid[i][j].mesh.position.x = -0.25;
             graph.grid[i][j].mesh.position.y = -0.225+(0.5/ROWS)*j;
-            graph.grid[i][j].mesh.position.z = 0.225-(0.5/COLS)*(i-3*COLS);
+            graph.grid[i][j].mesh.position.z = -0.225+(0.5/COLS)*(i-3*COLS);
             graph.grid[i][j].mesh.rotateY(Math.PI/2);
             scene.add(graph.grid[i][j].mesh);
         }
