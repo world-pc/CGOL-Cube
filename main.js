@@ -103,8 +103,7 @@ class Graph {
         }
 
         if(given_node.alive) {
-            //console.log('live node has ' + live_neigh_count + ' alive neighbors.');
-            if(live_neigh_count < 2) {
+            if(live_neigh_count < 1) {
                 return false;
             }
             else if(live_neigh_count == 2 ||
@@ -233,14 +232,14 @@ function initialize() {
 
 function redrawFrontFace() {
     for(let i = 0; i < graph.grid.length; i += 1) {
-	for(let j = 0; j < ROWS; j += 1) {
-	    if(graph.grid[i][j].alive == true) {
-            graph.grid[i][j].mesh.material.color.set('black');
-	    }
-	    else {
-            graph.grid[i][j].mesh.material.color.set('white');
-	    }
-	}
+        for(let j = 0; j < ROWS; j += 1) {
+            if(graph.grid[i][j].alive == true) {
+                graph.grid[i][j].mesh.material.color.set('black');
+            }
+            else {
+                graph.grid[i][j].mesh.material.color.set('white');
+            }
+        }
     }
 }
 
