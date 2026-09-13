@@ -23,8 +23,19 @@ class Graph {
                 counter += 1;
             }
         }
-        
-        //assign the neighbors for each node
+ 
+        this.t_grid = []; //the top face grid
+
+        //populate the top face grid.
+        for(let i = 0; i < COLS; i += 1) {
+            this.t_grid.push([]);
+            for(let j = 0; j < ROWS; j += 1) {
+                this.t_grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
+                counter += 1;
+            }
+        }
+
+        //assign the neighbors for each node on Front, Right, Back, and Left faces
         const glen = this.grid.length;
         for(let i = 0; i < this.grid.length; i += 1) {
             for(let j = 0; j < ROWS; j += 1) {
@@ -81,9 +92,115 @@ class Graph {
                 }
             }
         }
+
+        //neighbors for top grid
+        //first connect all adjacent cells within the top grid
+        for(let i = 0; i < COLS; i += 1) {
+            for(let j = 0; j < ROWS; j += 1) {
+                
+                //left
+                if(i > 0) {
+                    //orthogonal left
+                    this.t_grid[i][j].neighbor_ids.push(
+                        this.t_grid[i-1][j].id
+                    );
+
+                    //upper left
+                    if(j > 0) {
+                        this.t_grid[i][j].neighbor_ids.push(
+                            this.t_grid[i-1][j-1].id
+                        );
+                    }
+
+                    //lower left
+                    if(j < ROWS-1) {
+                        this.t_grid[i][j].neighbor_ids.push(
+                            this.t_grid[i-1][j+1].id
+                        );
+                    }
+                }
+
+                //right
+                if(i < ROWS-1) {
+                    //orthogonal right
+                    this.t_grid[i][j].neighbor_ids.push(
+                        this.t_grid[i+1][j].id
+                    );
+
+                    //upper right
+                    if(j > 0) {
+                        this.t_grid[i][j].neighbor_ids.push(
+                            this.t_grid[i+1][j-1].id
+                        );
+                    }
+
+                    //lower right
+                    if(j < ROWS-1) {
+                        this.t_grid[i][j].neighbor_ids.push(
+                            this.t_grid[i+1][j+1].id
+                        );
+                    }
+                }
+
+                //up
+                if(j > 0) {
+                    this.t_grid[i][j].neighbor_ids.push(
+                        this.t_grid[i][j-1].id
+                    );
+                }
+
+                //down
+                if(j < ROWS-1) {
+                    this.t_grid[i][j].neighbor_ids.push(
+                        this.t_grid[i][j+1].id
+                    );
+                }
+           }
+        }
+
+        //connect top row of each side-face with corresponding top grid edge cells
+        //front face
+        /*for(let i = 0; i < COLS; i += 1) {
+            this.t_grid[i][ROWS-1].neighbor_ids.push(
+                this.grid[i][0].id
+            );
+            this.grid[i][0].neighbor_ids.push(
+                this.t_grid[i][ROWS-1].id
+            );
+        }
+        //right face
+        for(let i = 0; i < COLS; i += 1) {
+            this.t_grid[COLS-1][i].neighbor_ids.push(
+                this.grid[COLS+i][0].id
+            );
+            this.grid[COLS+i][0].neighbor_ids.push(
+                this.t_grid[COLS-1][i].id
+            );
+        }
+        //back face
+        for(let i = 0; i < COLS; i += 1) {
+            this.t_grid[i][0].neighbor_ids.push(
+                this.grid[2*COLS+i][0].id
+            );
+            this.grid[2*COLS+i][0].neighbor_ids.push(
+                this.t_grid[i][0].id
+            );
+        }
+
+        //left face
+        for(let i = 0; i < COLS; i += 1) {
+            this.t_grid[0][i].neighbor_ids.push(
+                this.grid[2*COLS+i][0].id
+            );
+            this.grid[3*COLS+i][0].neighbor_ids.push(
+                this.t_grid[0][i].id
+            );
+        }*/
     }
     
     isAliveById(node_id) {
+
+        //check front, right, back, and left faces
         for(let i = 0; i < this.grid.length; i += 1) {
             for(let j = 0; j < ROWS; j += 1) {
                 if(this.grid[i][j].id === node_id) {
@@ -91,11 +208,23 @@ class Graph {
                 }
             }
         }
+
+        //check top face
+        for(let i = 0; i < COLS; i += 1) {
+            for(let j = 0; j < ROWS; j += 1) {
+                if(this.t_grid[i][j].id === node_id) {
+                    console.log('('+i+', '+j+') is alive!');
+                    return this.t_grid[i][j].alive;
+                }
+            }
+        }
+
         return false;
     }
     
     nxValue(given_node) {
         let live_neigh_count = 0;
+
         for(let i = 0; i < given_node.neighbor_ids.length; i += 1) {
             if(this.isAliveById(given_node.neighbor_ids[i])) {
                 live_neigh_count += 1;
@@ -124,6 +253,7 @@ class Graph {
     }
     
     update() {
+        //front, right, back, left face
         let nu_grid = this.grid.map(col => col.map(node => {
             let clone = new Node(node.id, node.alive);
             clone.neighbor_ids = [...node.neighbor_ids];
@@ -137,7 +267,22 @@ class Graph {
             }
         }
 
+        //top face
+        let nu_t_grid = this.t_grid.map(col => col.map(node => {
+            let clone = new Node(node.id, node.alive);
+            clone.neighbor_ids = [...node.neighbor_ids];
+            clone.mesh = node.mesh;
+            return clone;
+        }));
+
+        for(let i = 0; i < COLS; i += 1) {
+            for(let j = 0; j < ROWS; j += 1) {
+                nu_t_grid[i][j].alive = this.nxValue(this.t_grid[i][j]);
+            }
+        }
+
         this.grid = nu_grid.map(col => [...col]);
+        this.t_grid = nu_t_grid.map(col => [...col]);
     }
 }
 
@@ -159,7 +304,7 @@ function initialize() {
     controls.target.set(0, 0, 0);
     controls.update();
 
-    camera.position.set(0, 0.1, 0.9); 
+    camera.position.set(0.25, 1, 0.9);
 
     document.getElementById('animation').appendChild(renderer.domElement);
     renderer.domElement.style.borderRadius = '20px';
@@ -228,9 +373,23 @@ function initialize() {
             scene.add(graph.grid[i][j].mesh);
         }
     }
+
+    //draw top face
+    for(let i = 0; i < COLS; i += 1) {
+        for(let j = 0; j < ROWS; j += 1) {
+            graph.t_grid[i][j].mesh = new THREE.Mesh(face_geo,
+                new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
+            graph.t_grid[i][j].mesh.position.x = -0.225+(0.5/COLS)*i;
+            graph.t_grid[i][j].mesh.position.y = 0.25;
+            graph.t_grid[i][j].mesh.position.z = -0.225+(0.5/COLS)*j;
+            graph.t_grid[i][j].mesh.rotateX(Math.PI/2);
+            scene.add(graph.t_grid[i][j].mesh);
+        }
+    }
 }
 
-function redrawFrontFace() {
+function redrawFaces() {
+    //front, right, back, and left face
     for(let i = 0; i < graph.grid.length; i += 1) {
         for(let j = 0; j < ROWS; j += 1) {
             if(graph.grid[i][j].alive == true) {
@@ -238,6 +397,18 @@ function redrawFrontFace() {
             }
             else {
                 graph.grid[i][j].mesh.material.color.set('white');
+            }
+        }
+    }
+
+    //top face
+    for(let i = 0; i < COLS; i += 1) {
+        for(let j = 0; j < ROWS; j += 1) {
+            if(graph.t_grid[i][j].alive == true) {
+                graph.t_grid[i][j].mesh.material.color.set('black');
+            }
+            else {
+                graph.t_grid[i][j].mesh.material.color.set('white');
             }
         }
     }
@@ -258,7 +429,7 @@ function animate(time) {
 
     if(frame % 25 == 0) {
         graph.update();
-        redrawFrontFace();
+        redrawFaces();
     }
     
     renderer.render(scene, camera);
