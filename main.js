@@ -19,6 +19,12 @@ class Graph {
         for(let i = 0; i < 4*COLS; i += 1) {
             this.grid.push([]);
             for(let j = 0; j < ROWS; j += 1) {
+                /*if ((j <= ROWS/2) && (i % COLS < COLS/2)) {
+                    this.grid.at(-1).push(new Node(counter, true));
+                }
+                else {
+                    this.grid.at(-1).push(new Node(counter, false));
+                }*/
                 this.grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
                 counter += 1;
             }
@@ -160,16 +166,35 @@ class Graph {
 
         //connect top row of each side-face with corresponding top grid edge cells
         //front face
-        /*for(let i = 0; i < COLS; i += 1) {
+        for(let i = 0; i < COLS; i += 1) {
+            //up
             this.t_grid[i][ROWS-1].neighbor_ids.push(
                 this.grid[i][0].id
             );
             this.grid[i][0].neighbor_ids.push(
                 this.t_grid[i][ROWS-1].id
             );
+            //up-right diagonals
+            if(i < COLS-1) {
+                this.grid[i+1][0].neighbor_ids.push(
+                    this.t_grid[i][ROWS-1].id
+                );
+                this.t_grid[i][ROWS-1].neighbor_ids.push(
+                    this.grid[i+1][0].id
+                );
+            }
+            //up-left diagonals
+            if(i > 0) {
+                this.grid[i][0].neighbor_ids.push(
+                    this.t_grid[i-1][ROWS-1].id
+                );
+                this.t_grid[i][ROWS-1].neighbor_ids.push(
+                    this.grid[i-1][0].id
+                );
+            }
         }
         //right face
-        for(let i = 0; i < COLS; i += 1) {
+        /*for(let i = 0; i < COLS; i += 1) {
             this.t_grid[COLS-1][i].neighbor_ids.push(
                 this.grid[COLS+i][0].id
             );
@@ -230,6 +255,8 @@ class Graph {
                 live_neigh_count += 1;
             }
         }
+
+        console.log('live neigh count: '+live_neigh_count);
 
         if(given_node.alive) {
             if(live_neigh_count < 1) {
@@ -304,7 +331,7 @@ function initialize() {
     controls.target.set(0, 0, 0);
     controls.update();
 
-    camera.position.set(0.25, 1, 0.9);
+    camera.position.set(0.25, 0.5, 0.4);
 
     document.getElementById('animation').appendChild(renderer.domElement);
     renderer.domElement.style.borderRadius = '20px';
@@ -330,7 +357,7 @@ function initialize() {
             graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
                 new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
             graph.grid[i][j].mesh.position.x = -0.225+(0.5/COLS)*i;
-            graph.grid[i][j].mesh.position.y = -0.225+(0.5/ROWS)*j;
+            graph.grid[i][j].mesh.position.y = 0.225-(0.5/ROWS)*j;
             graph.grid[i][j].mesh.position.z = 0.25;
             scene.add(graph.grid[i][j].mesh);
         }
@@ -342,7 +369,7 @@ function initialize() {
             graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
                 new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
             graph.grid[i][j].mesh.position.x = 0.25;
-            graph.grid[i][j].mesh.position.y = -0.225+(0.5/ROWS)*j;
+            graph.grid[i][j].mesh.position.y = 0.225-(0.5/ROWS)*j;
             graph.grid[i][j].mesh.position.z = 0.225-(0.5/COLS)*(i-COLS);
             graph.grid[i][j].mesh.rotateY(Math.PI / 2);
             scene.add(graph.grid[i][j].mesh);
@@ -355,7 +382,7 @@ function initialize() {
             graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
                 new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
             graph.grid[i][j].mesh.position.x = 0.225-(0.5/COLS)*(i-2*COLS);
-            graph.grid[i][j].mesh.position.y = -0.225+(0.5/ROWS)*j;
+            graph.grid[i][j].mesh.position.y = 0.225-(0.5/ROWS)*j;
             graph.grid[i][j].mesh.position.z = -0.25;
             scene.add(graph.grid[i][j].mesh);
         }
@@ -367,7 +394,7 @@ function initialize() {
             graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
                 new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
             graph.grid[i][j].mesh.position.x = -0.25;
-            graph.grid[i][j].mesh.position.y = -0.225+(0.5/ROWS)*j;
+            graph.grid[i][j].mesh.position.y = 0.225-(0.5/ROWS)*j;
             graph.grid[i][j].mesh.position.z = -0.225+(0.5/COLS)*(i-3*COLS);
             graph.grid[i][j].mesh.rotateY(Math.PI/2);
             scene.add(graph.grid[i][j].mesh);
