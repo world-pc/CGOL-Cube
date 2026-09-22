@@ -258,22 +258,37 @@ class Graph {
             }
         }
 
-        /*
         //left face
         for(let i = 0; i < COLS; i += 1) {
 
             //up
             this.t_grid[0][i].neighbor_ids.push(
-                this.grid[2*COLS+i][0].id
+                this.grid[3*COLS+i][0].id
             );
             this.grid[3*COLS+i][0].neighbor_ids.push(
                 this.t_grid[0][i].id
             );
 
             //up-right
-            
+            if(i < ROWS-1) {
+                this.t_grid[0][i+1].neighbor_ids.push(
+                    this.grid[3*COLS + i][0].id
+                );
+                this.grid[3*COLS + i][0].neighbor_ids.push(
+                    this.t_grid[0][i+1].id
+                );
+            }
+
             //up-left
-        }*/
+            if(i > 0) {
+                this.t_grid[0][i-1].neighbor_ids.push(
+                    this.grid[3 * COLS + i][0].id
+                );
+                this.grid[3 * COLS + i][0].neighbor_ids.push(
+                    this.t_grid[0][i-1].id
+                );
+            }
+        }
     }
     
     isAliveById(node_id) {
