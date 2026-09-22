@@ -226,23 +226,53 @@ class Graph {
         }
 
         //back face
-        /*for(let i = 0; i < COLS; i += 1) {
-            this.t_grid[i][0].neighbor_ids.push(
+        for(let i = 0; i < COLS; i += 1) {
+            let t_i = COLS - 1 - i;
+
+            //up
+            this.t_grid[t_i][0].neighbor_ids.push(
                 this.grid[2*COLS+i][0].id
             );
             this.grid[2*COLS+i][0].neighbor_ids.push(
-                this.t_grid[i][0].id
+                this.t_grid[t_i][0].id
             );
+
+            //up-right diagonals
+            if(t_i > 0) {
+                this.t_grid[t_i-1][0].neighbor_ids.push(
+                    this.grid[2*COLS+i][0].id
+                );
+                this.grid[2*COLS+i][0].neighbor_ids.push(
+                    this.t_grid[t_i-1][0].id
+                );
+            }
+
+            //up-left diagonals
+            if(t_i < ROWS-1) {
+                this.t_grid[t_i+1][0].neighbor_ids.push(
+                    this.grid[2*COLS+i][0].id
+                );
+                this.grid[2*COLS+i][0].neighbor_ids.push(
+                    this.t_grid[t_i+1][0].id
+                );
+            }
         }
 
+        /*
         //left face
         for(let i = 0; i < COLS; i += 1) {
+
+            //up
             this.t_grid[0][i].neighbor_ids.push(
                 this.grid[2*COLS+i][0].id
             );
             this.grid[3*COLS+i][0].neighbor_ids.push(
                 this.t_grid[0][i].id
             );
+
+            //up-right
+            
+            //up-left
         }*/
     }
     
