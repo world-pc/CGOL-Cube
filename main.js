@@ -193,17 +193,38 @@ class Graph {
                 );
             }
         }
+
         //right face
-        /*for(let i = 0; i < COLS; i += 1) {
+        for(let i = 0; i < COLS; i += 1) {
+            //up
             this.t_grid[COLS-1][i].neighbor_ids.push(
                 this.grid[COLS+i][0].id
             );
             this.grid[COLS+i][0].neighbor_ids.push(
                 this.t_grid[COLS-1][i].id
             );
+            //up-right diagonals
+            if(i > 0) {
+                this.grid[i][0].neighbor_ids.push(
+                    this.t_grid[COLS-1][i-1].id
+                );
+                this.grid[COLS-1][i-1].neighbor_ids.push(
+                    this.t_grid[i][0].id
+                );
+            }
+            //up-left diagonals
+            if(i < ROWS-1) {
+                this.grid[i][0].neighbor_ids.push(
+                    this.grid[COLS-1][i+1].id
+                );
+                this.grid[COLS-1][i+1].neighbor_ids.push(
+                    this.grid[i][0].neighbor_ids.id
+                );
+            }
         }
+
         //back face
-        for(let i = 0; i < COLS; i += 1) {
+        /*for(let i = 0; i < COLS; i += 1) {
             this.t_grid[i][0].neighbor_ids.push(
                 this.grid[2*COLS+i][0].id
             );
