@@ -495,6 +495,19 @@ function initialize() {
             scene.add(graph.t_grid[i][j].mesh);
         }
     }
+
+    //draw bottom face
+    for(let i = 0; i < COLS; i += 1) {
+        for(let j = 0; j < ROWS; j += 1) {
+            graph.b_grid[i][j].mesh = new THREE.Mesh(face_geo,
+                new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
+            graph.b_grid[i][j].mesh.position.x = -0.225 + (0.5/COLS)*i;
+            graph.b_grid[i][j].mesh.position.y = -0.25;
+            graph.b_grid[i][j].mesh.position.z = -0.225+(0.5/COLS)*j;
+            graph.b_grid[i][j].mesh.rotateX(Math.PI/2);
+            scene.add(graph.b_grid[i][j].mesh);
+        }
+    }
 }
 
 function redrawFaces() {
@@ -518,6 +531,18 @@ function redrawFaces() {
             }
             else {
                 graph.t_grid[i][j].mesh.material.color.set('white');
+            }
+        }
+    }
+
+    //bottom face
+    for(let i = 0; i < COLS; i += 1) {
+        for(let j = 0; j < ROWS; j += 1) {
+            if(graph.b_grid[i][j].alive == true) {
+                graph.b_grid[i][j].mesh.material.color.set('black');
+            }
+            else {
+                graph.b_grid[i][j].mesh.material.color.set('white');
             }
         }
     }
