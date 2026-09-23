@@ -41,6 +41,17 @@ class Graph {
             }
         }
 
+        this.b_grid = []; //the bottom face grid
+
+        //populate the bottom face grid
+        for(let i = 0; i < COLS; i += 1) {
+            this.b_grid.push([]);
+            for(let j = 0; j < ROWS; j += 1) {
+                this.b_grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
+                counter += 1;
+            }
+        }
+
         //assign the neighbors for each node on Front, Right, Back, and Left faces
         const glen = this.grid.length;
         for(let i = 0; i < this.grid.length; i += 1) {
@@ -98,6 +109,9 @@ class Graph {
                 }
             }
         }
+
+        //neighbors for bottom grid
+        
 
         //neighbors for top grid
         //first connect all adjacent cells within the top grid
