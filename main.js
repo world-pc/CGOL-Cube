@@ -111,7 +111,66 @@ class Graph {
         }
 
         //neighbors for bottom grid
-        
+        for(let i = 0; i < COLS; i += 1) {
+            for(let j = 0; j < ROWS; j += 1) {
+                if(i > 0) {
+                    //orthogonal left
+                    this.b_grid[i][j].neighbor_ids.push(
+                        this.b_grid[i-1][j].id
+                    );
+
+                    //upper left
+                    if(j > 0) {
+                        this.b_grid[i][j].neighbor_ids.push(
+                            this.b_grid[i-1][j-1].id
+                        );
+                    }
+
+                    //lower left
+                    if(j < ROWS-1) {
+                        this.b_grid[i][j].neighbor_ids.push(
+                            this.b_grid[i-1][j+1].id
+                        );
+                    }
+                }
+
+                //right
+                if(i < ROWS-1) {
+                    //orthogonal right
+                    this.b_grid[i][j].neighbor_ids.push(
+                        this.b_grid[i+1][j].id
+                    );
+
+                    //upper right
+                    if(j > 0) {
+                        this.b_grid[i][j].neighbor_ids.push(
+                            this.b_grid[i+1][j-1].id
+                        );
+                    }
+
+                    //lower right
+                    if(j < ROWS-1) {
+                        this.b_grid[i][j].neighbor_ids.push(
+                            this.b_grid[i+1][j+1].id
+                        );
+                    }
+                }
+
+                //up
+                if(j > 0) {
+                    this.b_grid[i][j].neighbor_ids.push(
+                        this.b_grid[i][j-1].id
+                    );
+                }
+
+                //down
+                if(j < ROWS-1) {
+                    this.b_grid[i][j].neighbor_ids.push(
+                        this.b_grid[i][j+1].id
+                    );
+                }
+            }
+        }
 
         //neighbors for top grid
         //first connect all adjacent cells within the top grid
@@ -326,6 +385,16 @@ class Graph {
             }
         }
 
+        //check bottom face
+        for(let i = 0; i < COLS; i += 1) {
+            for(let j = 0; j < ROWS; j += 1) {
+                if(this.b_grid[i][j].id === node_id) {
+                    console.log('('+i+', '+j+') is alive!');
+                    return this.b_grid[i][j].alive;
+                }
+            }
+        }
+
         return false;
     }
     
@@ -390,8 +459,23 @@ class Graph {
             }
         }
 
+        //bottom face
+        let nu_b_grid = this.b_grid.map(col => col.map(node => {
+            let clone = new Node(node.id, node.alive);
+            clone.neighbor_ids = [...node.neighbor_ids];
+            clone.mesh = node.mesh;
+            return clone;
+        }));
+        
+        for(let i = 0; i < COLS; i += 1) {
+            for(let j = 0; j < ROWS; j += 1) {
+                nu_b_grid[i][j].alive = this.nxValue(this.b_grid[i][j]);
+            }
+        }
+
         this.grid = nu_grid.map(col => [...col]);
         this.t_grid = nu_t_grid.map(col => [...col]);
+        this.b_grid = nu_b_grid.map(col => [...col]);
     }
 }
 
