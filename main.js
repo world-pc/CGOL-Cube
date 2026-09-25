@@ -621,7 +621,7 @@ class Graph {
 }
 
 const CANVAS_WIDTH = 600, CANVAS_HEIGHT = 400;
-let scene, camera, renderer, graph, controls;
+let scene, camera, renderer, graph, controls, cgol_cube;
 function initialize() {
 
     scene = new THREE.Scene();
@@ -650,7 +650,7 @@ function initialize() {
     graph = new Graph();
 
     //wireframe for cube
-    var cgol_cube = {geo: new THREE.BoxGeometry(0.5, 0.5, 0.5)};
+    cgol_cube = {geo: new THREE.BoxGeometry(0.5, 0.5, 0.5)};
     cgol_cube.edges = new THREE.EdgesGeometry(cgol_cube.geo);
     cgol_cube.line = new THREE.LineSegments(
         cgol_cube.edges,
@@ -738,9 +738,9 @@ function initialize() {
 }
 
 let hue = 0;
-function nxColor(offset) {
-    hue = (hue + 0.005) % 360;
-    return `hsl(${(hue + 3*offset)%360}, 75%, 50%)`;
+function nxColor() {
+    hue = (hue + 1) % 360;
+    return `hsl(${hue}, 75%, 50%)`;
 }
 
 function redrawFaces() {
@@ -751,9 +751,7 @@ function redrawFaces() {
                 graph.grid[i][j].mesh.material.color.set('black');
             }
             else {
-                graph.grid[i][j].mesh.material.color.set(
-                    nxColor(graph.grid[i][j].id)
-                );
+                graph.grid[i][j].mesh.material.color.set('white');
             }
         }
     }
@@ -765,9 +763,7 @@ function redrawFaces() {
                 graph.t_grid[i][j].mesh.material.color.set('black');
             }
             else {
-                graph.t_grid[i][j].mesh.material.color.set(
-                    nxColor(graph.grid[i][j].id)
-                );
+                graph.t_grid[i][j].mesh.material.color.set('white');
             }
         }
     }
@@ -779,12 +775,12 @@ function redrawFaces() {
                 graph.b_grid[i][j].mesh.material.color.set('black');
             }
             else {
-                graph.b_grid[i][j].mesh.material.color.set(
-                    nxColor(graph.grid[i][j].id)
-                );
+                graph.b_grid[i][j].mesh.material.color.set('white');
             }
         }
     }
+
+    cgol_cube.line.material.color.set(nxColor());
 }
 
 initialize();
