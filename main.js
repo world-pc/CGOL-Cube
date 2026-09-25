@@ -239,30 +239,30 @@ class Graph {
             let t_i = COLS - 1 - i;
 
             //up
-            this.t_grid[t_i][0].neighbor_ids.push(
-                this.grid[2*COLS+i][0].id
+            this.b_grid[t_i][0].neighbor_ids.push(
+                this.grid[2*COLS+i][ROWS-1].id
             );
-            this.grid[2*COLS+i][0].neighbor_ids.push(
-                this.t_grid[t_i][0].id
+            this.grid[2*COLS+i][ROWS-1].neighbor_ids.push(
+                this.b_grid[t_i][0].id
             );
 
             //up-right diagonals
             if(t_i > 0) {
-                this.t_grid[t_i-1][0].neighbor_ids.push(
-                    this.grid[2*COLS+i][0].id
+                this.b_grid[t_i-1][0].neighbor_ids.push(
+                    this.grid[2*COLS+i][ROWS-1].id
                 );
-                this.grid[2*COLS+i][0].neighbor_ids.push(
-                    this.t_grid[t_i-1][0].id
+                this.grid[2*COLS+i][ROWS-1].neighbor_ids.push(
+                    this.b_grid[t_i-1][0].id
                 );
             }
 
             //up-left diagonals
             if(t_i < ROWS-1) {
-                this.t_grid[t_i+1][0].neighbor_ids.push(
-                    this.grid[2*COLS+i][0].id
+                this.b_grid[t_i+1][0].neighbor_ids.push(
+                    this.grid[2*COLS+i][ROWS-1].id
                 );
-                this.grid[2*COLS+i][0].neighbor_ids.push(
-                    this.t_grid[t_i+1][0].id
+                this.grid[2*COLS+i][ROWS-1].neighbor_ids.push(
+                    this.b_grid[t_i+1][0].id
                 );
             }
         }
