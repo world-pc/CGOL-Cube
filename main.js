@@ -1,5 +1,5 @@
-let ROWS = 10,
-    COLS = 10;
+let ROWS = 20,
+    COLS = 20;
 
 let AUTO_ORBIT = true;
 
@@ -658,15 +658,15 @@ function initialize() {
     );
     scene.add(cgol_cube.line);
 
-    const face_geo = new THREE.PlaneGeometry(.05, .05);
+    const face_geo = new THREE.PlaneGeometry(.5/COLS, .5/ROWS);
 
     //draw front face
     for(let i = 0; i < COLS; i += 1) {
         for(let j = 0; j < ROWS; j += 1) {
             graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
                 new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
-            graph.grid[i][j].mesh.position.x = -0.225+(0.5/COLS)*i;
-            graph.grid[i][j].mesh.position.y = 0.225-(0.5/ROWS)*j;
+            graph.grid[i][j].mesh.position.x = (-0.25 + 0.5/(2*COLS)) +(0.5/COLS)*i;
+            graph.grid[i][j].mesh.position.y = (0.25 - 0.5/(2*ROWS)) - (0.5/ROWS)*j;
             graph.grid[i][j].mesh.position.z = 0.25;
             scene.add(graph.grid[i][j].mesh);
         }
@@ -678,8 +678,8 @@ function initialize() {
             graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
                 new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
             graph.grid[i][j].mesh.position.x = 0.25;
-            graph.grid[i][j].mesh.position.y = 0.225-(0.5/ROWS)*j;
-            graph.grid[i][j].mesh.position.z = 0.225-(0.5/COLS)*(i-COLS);
+            graph.grid[i][j].mesh.position.y = (0.25 - 0.5/(2*ROWS)) - (0.5/ROWS)*j;
+            graph.grid[i][j].mesh.position.z = (0.25 - 0.5/(2*COLS)) - (0.5/COLS)*(i-COLS);
             graph.grid[i][j].mesh.rotateY(Math.PI / 2);
             scene.add(graph.grid[i][j].mesh);
         }
@@ -690,8 +690,8 @@ function initialize() {
         for(let j = 0; j < ROWS; j += 1) {
             graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
                 new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
-            graph.grid[i][j].mesh.position.x = 0.225-(0.5/COLS)*(i-2*COLS);
-            graph.grid[i][j].mesh.position.y = 0.225-(0.5/ROWS)*j;
+            graph.grid[i][j].mesh.position.x = (0.25 - 0.5/(2*COLS)) - (0.5/COLS)*(i-2*COLS);
+            graph.grid[i][j].mesh.position.y = (0.25 - 0.5/(2*ROWS)) - (0.5/ROWS)*j;
             graph.grid[i][j].mesh.position.z = -0.25;
             scene.add(graph.grid[i][j].mesh);
         }
@@ -703,8 +703,8 @@ function initialize() {
             graph.grid[i][j].mesh = new THREE.Mesh(face_geo,
                 new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
             graph.grid[i][j].mesh.position.x = -0.25;
-            graph.grid[i][j].mesh.position.y = 0.225-(0.5/ROWS)*j;
-            graph.grid[i][j].mesh.position.z = -0.225+(0.5/COLS)*(i-3*COLS);
+            graph.grid[i][j].mesh.position.y = (0.25 - 0.5/(2*ROWS)) - (0.5/ROWS)*j;
+            graph.grid[i][j].mesh.position.z = (-0.25 + 0.5/(2*COLS)) + (0.5/COLS)*(i-3*COLS);
             graph.grid[i][j].mesh.rotateY(Math.PI/2);
             scene.add(graph.grid[i][j].mesh);
         }
@@ -715,9 +715,9 @@ function initialize() {
         for(let j = 0; j < ROWS; j += 1) {
             graph.t_grid[i][j].mesh = new THREE.Mesh(face_geo,
                 new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
-            graph.t_grid[i][j].mesh.position.x = -0.225+(0.5/COLS)*i;
+            graph.t_grid[i][j].mesh.position.x = (-0.25 + 0.5/(2*COLS)) + (0.5/COLS)*i;
             graph.t_grid[i][j].mesh.position.y = 0.25;
-            graph.t_grid[i][j].mesh.position.z = -0.225+(0.5/COLS)*j;
+            graph.t_grid[i][j].mesh.position.z = (-0.25 + 0.5/(2*ROWS)) + (0.5/ROWS)*j;
             graph.t_grid[i][j].mesh.rotateX(Math.PI/2);
             scene.add(graph.t_grid[i][j].mesh);
         }
@@ -728,9 +728,9 @@ function initialize() {
         for(let j = 0; j < ROWS; j += 1) {
             graph.b_grid[i][j].mesh = new THREE.Mesh(face_geo,
                 new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide}));
-            graph.b_grid[i][j].mesh.position.x = -0.225 + (0.5/COLS)*i;
+            graph.b_grid[i][j].mesh.position.x = (-0.25 + 0.5/(2*COLS)) + (0.5/COLS)*i;
             graph.b_grid[i][j].mesh.position.y = -0.25;
-            graph.b_grid[i][j].mesh.position.z = -0.225+(0.5/COLS)*j;
+            graph.b_grid[i][j].mesh.position.z = (-0.25 + 0.5/(2*ROWS)) + (0.5/ROWS)*j;
             graph.b_grid[i][j].mesh.rotateX(Math.PI/2);
             scene.add(graph.b_grid[i][j].mesh);
         }
