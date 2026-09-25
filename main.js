@@ -376,11 +376,11 @@ class Graph {
             );
             //up-right diagonals
             if(i < COLS-1) {
-                this.grid[i+1][0].neighbor_ids.push(
-                    this.t_grid[i][ROWS-1].id
+                this.grid[i][0].neighbor_ids.push(
+                    this.t_grid[i+1][ROWS-1].id
                 );
-                this.t_grid[i][ROWS-1].neighbor_ids.push(
-                    this.grid[i+1][0].id
+                this.t_grid[i+1][ROWS-1].neighbor_ids.push(
+                    this.grid[i][0].id
                 );
             }
             //up-left diagonals
@@ -388,8 +388,8 @@ class Graph {
                 this.grid[i][0].neighbor_ids.push(
                     this.t_grid[i-1][ROWS-1].id
                 );
-                this.t_grid[i][ROWS-1].neighbor_ids.push(
-                    this.grid[i-1][0].id
+                this.t_grid[i-1][ROWS-1].neighbor_ids.push(
+                    this.grid[i][0].id
                 );
             }
         }
