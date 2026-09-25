@@ -548,8 +548,6 @@ class Graph {
             }
         }
 
-        console.log('live neigh count: '+live_neigh_count);
-
         if(given_node.alive) {
             if(live_neigh_count < 1) {
                 return false;
@@ -786,7 +784,7 @@ function animate(time) {
 
     controls.update();
 
-    if(frame % 25 == 0) {
+    if(frame % 5 == 0) {
         graph.update();
         redrawFaces();
     }
