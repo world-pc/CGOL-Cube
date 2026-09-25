@@ -19,13 +19,7 @@ class Graph {
         for(let i = 0; i < 4*COLS; i += 1) {
             this.grid.push([]);
             for(let j = 0; j < ROWS; j += 1) {
-                /*if ((j <= ROWS/2) && (i % COLS < COLS/2)) {
-                    this.grid.at(-1).push(new Node(counter, true));
-                }
-                else {
-                    this.grid.at(-1).push(new Node(counter, false));
-                }*/
-                this.grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
+                this.grid.at(-1).push(new Node(counter, false /* (Math.random() < 0.5) */));
                 counter += 1;
             }
         }
@@ -36,7 +30,7 @@ class Graph {
         for(let i = 0; i < COLS; i += 1) {
             this.t_grid.push([]);
             for(let j = 0; j < ROWS; j += 1) {
-                this.t_grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
+                this.t_grid.at(-1).push(new Node(counter, false /* (Math.random() < 0.5) */));
                 counter += 1;
             }
         }
@@ -47,10 +41,16 @@ class Graph {
         for(let i = 0; i < COLS; i += 1) {
             this.b_grid.push([]);
             for(let j = 0; j < ROWS; j += 1) {
-                this.b_grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
+                this.b_grid.at(-1).push(new Node(counter, false /* (Math.random() < 0.5) */));
                 counter += 1;
             }
         }
+
+	this.grid[5][5].alive = true;
+	this.grid[5][6].alive = true;
+	this.grid[5][7].alive = true;
+	this.grid[4][7].alive = true;
+	this.grid[3][6].alive = true;
 
         //assign the neighbors for each node on Front, Right, Back, and Left faces
         const glen = this.grid.length;
@@ -185,11 +185,11 @@ class Graph {
             );
             //up-right diagonals
             if(i < COLS-1) {
-                this.grid[i+1][ROWS-1].neighbor_ids.push(
-                    this.b_grid[i][ROWS-1].id
+                this.grid[i][ROWS-1].neighbor_ids.push(
+                    this.b_grid[i+1][ROWS-1].id
                 );
-                this.b_grid[i][ROWS-1].neighbor_ids.push(
-                    this.grid[i+1][ROWS-1].id
+                this.b_grid[i+1][ROWS-1].neighbor_ids.push(
+                    this.grid[i][ROWS-1].id
                 );
             }
             //up-left diagonals
@@ -197,8 +197,8 @@ class Graph {
                 this.grid[i][ROWS-1].neighbor_ids.push(
                     this.b_grid[i-1][ROWS-1].id
                 );
-                this.b_grid[i][ROWS-1].neighbor_ids.push(
-                    this.grid[i-1][ROWS-1].id
+                this.b_grid[i-1][ROWS-1].neighbor_ids.push(
+                    this.grid[i][ROWS-1].id
                 );
             }
         }
@@ -271,30 +271,30 @@ class Graph {
         for(let i = 0; i < COLS; i += 1) {
 
             //up
-            this.t_grid[0][i].neighbor_ids.push(
-                this.grid[3*COLS+i][0].id
+            this.b_grid[0][i].neighbor_ids.push(
+                this.grid[3*COLS+i][ROWS-1].id
             );
-            this.grid[3*COLS+i][0].neighbor_ids.push(
-                this.t_grid[0][i].id
+            this.grid[3*COLS+i][ROWS-1].neighbor_ids.push(
+                this.b_grid[0][i].id
             );
 
             //up-right
             if(i < ROWS-1) {
-                this.t_grid[0][i+1].neighbor_ids.push(
-                    this.grid[3*COLS + i][0].id
+                this.b_grid[0][i+1].neighbor_ids.push(
+                    this.grid[3*COLS + i][ROWS-1].id
                 );
-                this.grid[3*COLS + i][0].neighbor_ids.push(
-                    this.t_grid[0][i+1].id
+                this.grid[3*COLS + i][ROWS-1].neighbor_ids.push(
+                    this.b_grid[0][i+1].id
                 );
             }
 
             //up-left
             if(i > 0) {
-                this.t_grid[0][i-1].neighbor_ids.push(
-                    this.grid[3 * COLS + i][0].id
+                this.b_grid[0][i-1].neighbor_ids.push(
+                    this.grid[3 * COLS + i][ROWS-1].id
                 );
-                this.grid[3 * COLS + i][0].neighbor_ids.push(
-                    this.t_grid[0][i-1].id
+                this.grid[3 * COLS + i][ROWS-1].neighbor_ids.push(
+                    this.b_grid[0][i-1].id
                 );
             }
         }
@@ -506,7 +506,6 @@ class Graph {
         for(let i = 0; i < COLS; i += 1) {
             for(let j = 0; j < ROWS; j += 1) {
                 if(this.t_grid[i][j].id === node_id) {
-                    console.log('('+i+', '+j+') is alive!');
                     return this.t_grid[i][j].alive;
                 }
             }
@@ -516,7 +515,6 @@ class Graph {
         for(let i = 0; i < COLS; i += 1) {
             for(let j = 0; j < ROWS; j += 1) {
                 if(this.b_grid[i][j].id === node_id) {
-                    console.log('('+i+', '+j+') is alive!');
                     return this.b_grid[i][j].alive;
                 }
             }
@@ -773,7 +771,7 @@ function animate(time) {
     controls.update();
 
     if(frame % 25 == 0) {
-        graph.update();
+        //graph.update();
         redrawFaces();
     }
     
