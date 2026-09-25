@@ -46,11 +46,27 @@ class Graph {
             }
         }
 
-	this.grid[5][5].alive = true;
-	this.grid[5][6].alive = true;
-	this.grid[5][7].alive = true;
-	this.grid[4][7].alive = true;
-	this.grid[3][6].alive = true;
+        //LWSS - LightWeightSpaceShip (across front, left, back, right faces)
+        this.grid[7][3].alive = true;
+        this.grid[7][1].alive = true;
+        this.grid[4][1].alive = true;
+        this.grid[3][3].alive = true;
+        this.grid[3][2].alive = true;
+	    this.grid[3][4].alive = true;
+        this.grid[4][4].alive = true;
+        this.grid[5][4].alive = true;
+        this.grid[6][4].alive = true;
+
+        //LWSS - LighweightSpaceShip (across front, top, back, bottom faces)
+        this.b_grid[4][0].alive = true;
+        this.b_grid[4][1].alive = true;
+        this.b_grid[4][2].alive = true;
+        this.b_grid[4][3].alive = true;
+        this.b_grid[5][4].alive = true;
+        this.b_grid[5][0].alive = true;
+        this.b_grid[6][0].alive = true;
+        this.b_grid[7][1].alive = true;
+        this.b_grid[7][4].alive = true;
 
         //assign the neighbors for each node on Front, Right, Back, and Left faces
         const glen = this.grid.length;
@@ -771,7 +787,7 @@ function animate(time) {
     controls.update();
 
     if(frame % 25 == 0) {
-        //graph.update();
+        graph.update();
         redrawFaces();
     }
     
