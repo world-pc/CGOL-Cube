@@ -650,11 +650,11 @@ function initialize() {
     cgol_cube.edges = new THREE.EdgesGeometry(cgol_cube.geo);
     cgol_cube.line = new THREE.LineSegments(
         cgol_cube.edges,
-        new THREE.LineBasicMaterial({color: 0xffffff})
+        new THREE.LineBasicMaterial({color: 0x000000})
     );
     scene.add(cgol_cube.line);
 
-    const face_geo = new THREE.PlaneGeometry(.045, .045);
+    const face_geo = new THREE.PlaneGeometry(.05, .05);
 
     //draw front face
     for(let i = 0; i < COLS; i += 1) {
