@@ -733,6 +733,12 @@ function initialize() {
     }
 }
 
+let hue = 0;
+function nxColor(offset) {
+    hue = (hue + 0.005) % 360;
+    return `hsl(${(hue + 3*offset)%360}, 75%, 50%)`;
+}
+
 function redrawFaces() {
     //front, right, back, and left face
     for(let i = 0; i < graph.grid.length; i += 1) {
@@ -741,7 +747,9 @@ function redrawFaces() {
                 graph.grid[i][j].mesh.material.color.set('black');
             }
             else {
-                graph.grid[i][j].mesh.material.color.set('white');
+                graph.grid[i][j].mesh.material.color.set(
+                    nxColor(graph.grid[i][j].id)
+                );
             }
         }
     }
@@ -753,7 +761,9 @@ function redrawFaces() {
                 graph.t_grid[i][j].mesh.material.color.set('black');
             }
             else {
-                graph.t_grid[i][j].mesh.material.color.set('white');
+                graph.t_grid[i][j].mesh.material.color.set(
+                    nxColor(graph.grid[i][j].id)
+                );
             }
         }
     }
@@ -765,7 +775,9 @@ function redrawFaces() {
                 graph.b_grid[i][j].mesh.material.color.set('black');
             }
             else {
-                graph.b_grid[i][j].mesh.material.color.set('white');
+                graph.b_grid[i][j].mesh.material.color.set(
+                    nxColor(graph.grid[i][j].id)
+                );
             }
         }
     }
