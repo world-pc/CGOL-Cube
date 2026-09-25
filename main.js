@@ -1,6 +1,8 @@
 let ROWS = 10,
     COLS = 10;
 
+let AUTO_ORBIT = true;
+
 class Node {
     constructor(id, alive) {
         this.id = id;
@@ -623,18 +625,20 @@ let scene, camera, renderer, graph, controls;
 function initialize() {
 
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(90, CANVAS_WIDTH/CANVAS_HEIGHT, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(120, CANVAS_WIDTH/CANVAS_HEIGHT, 0.1, 1000);
 
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
     renderer.setClearColor(0x000000);
 
     // drag-to-orbit
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.target.set(0, 0, 0);
-    controls.update();
+    if(!AUTO_ORBIT) {
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.target.set(0, 0, 0);
+        controls.update();
+    }
 
     camera.position.set(0.25, 0.5, 0.4);
 
@@ -789,12 +793,20 @@ initialize();
 let frame = 0;
 function animate(time) {
     /* camera orbits origin
-    camera.position.y = 0.1;
-    camera.position.x = Math.cos(frame/100 + Math.PI/3.5);
-    camera.position.z = Math.sin(frame/100 + Math.PI/3.5);
-    camera.lookAt(0,0,0); */
+    */
 
-    controls.update();
+    if(!AUTO_ORBIT) {
+        controls.update();
+    }
+    else {
+        let radius = 0.75;
+        let inclination = Math.PI/4*(1 + Math.sin(frame/100))+Math.PI/4;
+        let azimuth = frame/100;
+        camera.position.x = radius*Math.sin(inclination) * Math.cos(azimuth);
+        camera.position.y = radius*Math.cos(inclination);
+        camera.position.z = radius*Math.sin(inclination) * Math.sin(azimuth);
+        camera.lookAt(0,0,0); 
+    }
 
     if(frame % 5 == 0) {
         graph.update();
