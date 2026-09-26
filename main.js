@@ -21,7 +21,7 @@ class Graph {
         for(let i = 0; i < 4*COLS; i += 1) {
             this.grid.push([]);
             for(let j = 0; j < ROWS; j += 1) {
-                this.grid.at(-1).push(new Node(counter, false /* (Math.random() < 0.5) */));
+                this.grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
                 counter += 1;
             }
         }
@@ -32,7 +32,7 @@ class Graph {
         for(let i = 0; i < COLS; i += 1) {
             this.t_grid.push([]);
             for(let j = 0; j < ROWS; j += 1) {
-                this.t_grid.at(-1).push(new Node(counter, false /* (Math.random() < 0.5) */));
+                this.t_grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
                 counter += 1;
             }
         }
@@ -43,13 +43,13 @@ class Graph {
         for(let i = 0; i < COLS; i += 1) {
             this.b_grid.push([]);
             for(let j = 0; j < ROWS; j += 1) {
-                this.b_grid.at(-1).push(new Node(counter, false /* (Math.random() < 0.5) */));
+                this.b_grid.at(-1).push(new Node(counter, (Math.random() < 0.5)));
                 counter += 1;
             }
         }
 
         //LWSS - LightWeightSpaceShip (across front, left, back, right faces)
-        this.grid[7][3].alive = true;
+        /*this.grid[7][3].alive = true;
         this.grid[7][1].alive = true;
         this.grid[4][1].alive = true;
         this.grid[3][3].alive = true;
@@ -58,6 +58,16 @@ class Graph {
         this.grid[4][4].alive = true;
         this.grid[5][4].alive = true;
         this.grid[6][4].alive = true;
+
+        this.grid[17][3].alive = true;
+        this.grid[17][1].alive = true;
+        this.grid[14][1].alive = true;
+        this.grid[13][3].alive = true;
+        this.grid[13][2].alive = true;
+	    this.grid[13][4].alive = true;
+        this.grid[14][4].alive = true;
+        this.grid[15][4].alive = true;
+        this.grid[16][4].alive = true;
 
         //LWSS - LighweightSpaceShip (across front, top, back, bottom faces)
         this.b_grid[4][0].alive = true;
@@ -68,7 +78,7 @@ class Graph {
         this.b_grid[5][0].alive = true;
         this.b_grid[6][0].alive = true;
         this.b_grid[7][1].alive = true;
-        this.b_grid[7][4].alive = true;
+        this.b_grid[7][4].alive = true;*/
 
         //assign the neighbors for each node on Front, Right, Back, and Left faces
         const glen = this.grid.length;
